@@ -12,7 +12,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
-[![Tests](https://img.shields.io/badge/Tests-31%20Passed%20(100%25)-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/Tests-35%20Passed%20(100%25)-brightgreen.svg)]()
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero%20(Stdlib)-success.svg)]()
 [![ERP Compatibility](https://img.shields.io/badge/ERP-Tally%20%7C%20Zoho%20%7C%20Busy%20%7C%20Vyapar%20%7C%20Marg-orange.svg)]()
 [![Platform](https://img.shields.io/badge/Agent-Antigravity%20%7C%20Claude%20Code-purple.svg)]()
@@ -74,6 +74,9 @@ GST Auditor Agent automatically parses, sanitizes, and audits data from India's 
 | **Form CMP-08** | Sec 10 / Sec 10(2A) | Quarterly self-assessed tax challan for composition dealers (1% traders/manufacturers, 5% restaurants, 6% service providers). |
 | **GSTR-7 (TDS)** | Section 51 | Computes 2% TDS deductions on government/PSU contracts exceeding ₹2.5 Lakhs. |
 | **GSTR-8 (TCS)** | Section 52 | Computes 1% TCS collection on net supplies for E-Commerce Operators (Amazon, Flipkart, Swiggy, Zomato). |
+| **IMS (Invoice Management)** | GSTN Mandate (2025-2026) | Simulates the new recipient IMS portal (Accept / Reject / Pending actions) before auto-drafting GSTR-2B. |
+| **Section 16(4) Cut-Off** | Sec 16(4) CGST Act | Enforces the 30th November statutory deadline for claiming ITC of the preceding financial year. |
+| **ISD Credit Allocation** | Section 20 (Amended) | Mandatory distribution of common input service ITC to multi-state branches based on turnover ratios. |
 | **Section 50 Interest** | Sec 50(1) & 50(3) | Computes exact day-count statutory interest (18% p.a. on delayed net cash tax; 24% p.a. on utilized ineligible ITC). |
 | **E-Way Bill (EWB-01)** | Rule 138 | Enforces ₹50,000 threshold (and ₹1 Lakh exemptions in MH, DL, GJ, WB, BR) for movement of goods. |
 | **E-Invoice (IRN)** | Rule 48(4) | Enforces 64-character hash IRN and QR validation for businesses with turnover > ₹5 Crore. |

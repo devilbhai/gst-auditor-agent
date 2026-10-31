@@ -34,6 +34,7 @@ from rule42_43_engine import compute_rule42_reversal, compute_rule43_reversal
 from refund_engine import compute_inverted_duty_refund, compute_export_lut_refund
 from composition_engine import compute_cmp08_quarterly
 from tds_tcs_engine import compute_gstr7_tds, compute_gstr8_tcs
+from ims_engine import check_section_16_4_time_limit, process_ims_actions, compute_isd_distribution
 
 from adapters.tally_adapter import parse_tally_xml, parse_tally_csv
 from adapters.zoho_adapter import parse_zoho_csv
@@ -124,6 +125,18 @@ def main():
     p_imp.add_argument("file", help="Path to input export file (XML or CSV)")
     p_imp.add_argument("--format", choices=["tally-xml", "tally-csv", "zoho-csv", "universal-csv", "busy", "vyapar", "marg"], default="universal-csv")
     p_imp.add_argument("--output", help="Optional path to save normalized JSON file")
+
+    # 10. 2026 Modern Mandates: IMS & Section 16(4) & ISD
+    p_ims = subparsers.add_parser("ims", help="Simulate GSTN Invoice Management System (IMS) Accept/Reject/Pending actions")
+    p_ims.add_argument("actions_file", help="JSON file with invoice actions")
+    p_ims.add_argument("--period", default="102026")
+
+    p_s16 = subparsers.add_parser("sec16-4", help="Audit Section 16(4) 30-Nov statutory time limit on ITC")
+    p_s16.add_argument("--invoice-date", required=True, help="YYYY-MM-DD")
+    p_s16.add_argument("--filing-date", required=True, help="YYYY-MM-DD")
+
+    p_isd = subparsers.add_parser("isd", help="Mandatory Input Service Distributor (GSTR-6) allocation under Sec 20")
+    p_isd.add_argument("config_file", help="JSON file with HO GSTIN, common ITC and branch turnover data")
 
     args = parser.parse_args()
 
@@ -282,6 +295,31 @@ def main():
             print(f"✅ Successfully parsed {len(parsed)} invoices from {fmt.upper()} to: {args.output}")
         else:
             print(json.dumps(parsed, indent=2))
+
+
+    # IMS
+    elif args.command == "ims":
+        with open(args.actions_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        actions = data if isinstance(data, list) else data.get("actions", [])
+        res = process_ims_actions(actions, current_period=args.period)
+        print(json.dumps(res, indent=2))
+
+    # Section 16(4)
+    elif args.command == "sec16-4":
+        res = check_section_16_4_time_limit(args.invoice_date, args.filing_date)
+        print(json.dumps(res, indent=2))
+
+    # ISD
+    elif args.command == "isd":
+        with open(args.config_file, "r", encoding="utf-8") as f:
+            cfg = json.load(f)
+        res = compute_isd_distribution(
+            head_office_gstin=cfg["head_office_gstin"],
+            common_service_itc=cfg["common_service_itc"],
+            recipient_branches=cfg["branches"]
+        )
+        print(json.dumps(res, indent=2))
 
 
 if __name__ == "__main__":
