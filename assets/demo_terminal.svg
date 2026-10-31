@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 420" width="100%" height="100%">
+  <defs>
+    <style>
+      @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+      @keyframes line1 { 0% { opacity: 0; } 5% { opacity: 1; } 100% { opacity: 1; } }
+      @keyframes line2 { 0%, 15% { opacity: 0; } 20% { opacity: 1; } 100% { opacity: 1; } }
+      @keyframes line3 { 0%, 25% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 1; } }
+      @keyframes line4 { 0%, 35% { opacity: 0; } 40% { opacity: 1; } 100% { opacity: 1; } }
+      @keyframes line5 { 0%, 45% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 1; } }
+      @keyframes line6 { 0%, 55% { opacity: 0; } 60% { opacity: 1; } 100% { opacity: 1; } }
+      @keyframes line7 { 0%, 65% { opacity: 0; } 70% { opacity: 1; } 100% { opacity: 1; } }
+      @keyframes line8 { 0%, 75% { opacity: 0; } 80% { opacity: 1; } 100% { opacity: 1; } }
+      @keyframes line9 { 0%, 85% { opacity: 0; } 90% { opacity: 1; } 100% { opacity: 1; } }
+
+      .cursor { animation: blink 0.8s infinite; }
+      .l1 { animation: line1 8s infinite; }
+      .l2 { animation: line2 8s infinite; }
+      .l3 { animation: line3 8s infinite; }
+      .l4 { animation: line4 8s infinite; }
+      .l5 { animation: line5 8s infinite; }
+      .l6 { animation: line6 8s infinite; }
+      .l7 { animation: line7 8s infinite; }
+      .l8 { animation: line8 8s infinite; }
+      .l9 { animation: line9 8s infinite; }
+
+      .t-bold { font-weight: 700; }
+      .t-cyan { fill: #38bdf8; }
+      .t-green { fill: #4ade80; }
+      .t-amber { fill: #fbbf24; }
+      .t-red { fill: #f87171; }
+      .t-purple { fill: #c084fc; }
+      .t-white { fill: #f8fafc; }
+      .t-gray { fill: #94a3b8; }
+    </style>
+  </defs>
+
+  <!-- Terminal Window Background -->
+  <rect width="850" height="420" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1.5"/>
+
+  <!-- Window Header Bar -->
+  <rect width="850" height="38" rx="12" fill="#1e293b"/>
+  <rect y="28" width="850" height="10" fill="#1e293b"/>
+  <line x1="0" y1="38" x2="850" y2="38" stroke="#334155" stroke-width="1"/>
+
+  <!-- Window Control Buttons (macOS style) -->
+  <circle cx="20" cy="19" r="6" fill="#ef4444"/>
+  <circle cx="40" cy="19" r="6" fill="#f59e0b"/>
+  <circle cx="60" cy="19" r="6" fill="#10b981"/>
+
+  <!-- Title in Header -->
+  <text x="425" y="24" font-family="-apple-system, BlinkMacSystemFont, monospace" font-size="12" fill="#94a3b8" text-anchor="middle">
+    bash — gst-auditor audit — 850x420
+  </text>
+
+  <!-- Terminal Content Body -->
+  <g transform="translate(24, 70)" font-family="'JetBrains Mono', 'Fira Code', 'Courier New', monospace" font-size="12.5" line-height="1.6">
+    <!-- Command Prompt -->
+    <text y="0" class="l1">
+      <tspan class="t-green t-bold">tax-expert@india-macbook</tspan><tspan class="t-white">:</tspan><tspan class="t-cyan">~/books</tspan><tspan class="t-white">$ </tspan>
+      <tspan class="t-white t-bold">gst-auditor </tspan>
+      <tspan class="t-amber">test_data/sample_invoices.json </tspan>
+      <tspan class="t-purple">--html </tspan>
+      <tspan class="t-cyan">audit_dashboard.html</tspan>
+    </text>
+
+    <!-- Execution Feedback -->
+    <text y="30" class="l2">
+      <tspan class="t-green">✔</tspan> <tspan class="t-white">Loaded 5 invoices from Tally/Zoho export.</tspan>
+    </text>
+    <text y="54" class="l3">
+      <tspan class="t-green">✔</tspan> <tspan class="t-white">Mod-36 Checksum verified on 5/5 GSTINs.</tspan>
+      <tspan class="t-red"> [1 TYPO CAUGHT]</tspan>
+    </text>
+    <text y="78" class="l4">
+      <tspan class="t-green">✔</tspan> <tspan class="t-white">Interactive HTML Dashboard generated at: </tspan>
+      <tspan class="t-cyan t-bold">audit_dashboard.html</tspan>
+    </text>
+
+    <!-- Audit Summary Banner -->
+    <text y="116" class="l5">
+      <tspan class="t-amber t-bold"># 🇮🇳 GST Compliance &amp; Statutory Audit Report</tspan>
+    </text>
+    <text y="138" class="l5">
+      <tspan class="t-gray">Audit Status: </tspan><tspan class="t-red t-bold">🔴 ACTION REQUIRED</tspan>
+      <tspan class="t-gray"> | Invoices: </tspan><tspan class="t-white">5</tspan>
+      <tspan class="t-gray"> | Health Score: </tspan><tspan class="t-amber t-bold">40.0%</tspan>
+    </text>
+
+    <!-- Detailed Finding 1 -->
+    <text y="174" class="l6">
+      <tspan class="t-white t-bold">Invoice #INV-2026-001</tspan><tspan class="t-green t-bold"> — ✅ PASS </tspan>
+      <tspan class="t-gray">(MH 27 → MH 27 | CGST: ₹9k | SGST: ₹9k)</tspan>
+    </text>
+
+    <!-- Detailed Finding 2 with High Impact Errors -->
+    <text y="206" class="l7">
+      <tspan class="t-white t-bold">Invoice #INV-2026-002</tspan><tspan class="t-red t-bold"> — ❌ FAIL </tspan>
+      <tspan class="t-gray">(MH 27 → KA 29 | Consignment: ₹2.95 Lakhs)</tspan>
+    </text>
+    <text y="228" class="l8">
+      <tspan class="t-red">  ⚠️  [TAX JURISDICTION ERROR] Inter-state supply cannot charge CGST/SGST. Must charge IGST only.</tspan>
+    </text>
+    <text y="250" class="l8">
+      <tspan class="t-amber">  ⚠️  [RULE 138 MANDATE] Consignment value ₹2.95L exceeds ₹50k. E-Way Bill Number is MISSING.</tspan>
+    </text>
+    <text y="272" class="l8">
+      <tspan class="t-red">  ⚠️  [RULE 48(4) INVALIDITY] Turnover &gt; ₹5 Cr. Invoice without 64-char IRN is null &amp; void.</tspan>
+    </text>
+
+    <!-- Final Exposure & Cursor -->
+    <text y="306" class="l9">
+      <tspan class="t-cyan t-bold">▶ Total Tax Exposure at Risk: </tspan><tspan class="t-amber t-bold">₹61,200.00 </tspan>
+      <tspan class="t-gray">| Fixed JSON corrections exported.</tspan>
+    </text>
+    <text y="330" class="l9">
+      <tspan class="t-green t-bold">tax-expert@india-macbook</tspan><tspan class="t-white">:</tspan><tspan class="t-cyan">~/books</tspan><tspan class="t-white">$ </tspan>
+      <tspan class="t-white cursor">█</tspan>
+    </text>
+  </g>
+</svg>
