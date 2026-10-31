@@ -37,7 +37,7 @@ Every Indian startup, SaaS, and SME dreads GST reconciliation. A single tax juri
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/gst-auditor-agent.git
+git clone https://github.com/devilbhai/gst-auditor-agent.git
 cd gst-auditor-agent
 
 # 2. Run the audit against sample invoices
