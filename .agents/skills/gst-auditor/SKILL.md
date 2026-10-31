@@ -1,71 +1,53 @@
 ---
 name: gst-auditor
 description: >-
-  Complete Indian GST & CA Compliance Suite. Generates and audits GSTR-1, computes GSTR-3B
+  The Definitive Indian GST, CA Audit & Universal ERP Suite. Imports invoices from Tally Prime (XML/CSV),
+  Zoho Books, Busy, Vyapar, Marg ERP, and spreadsheets. Generates and audits GSTR-1, computes GSTR-3B
   tax set-off and cash challans (PMT-06), automates GSTR-9 / 9C annual turnover & ITC reconciliation,
+  computes Rule 42 & 43 pro-rata ITC reversals, calculates Form RFD-01 refunds (Inverted Duty & Export LUT),
   evaluates Rule 88C (DRC-01B) & Rule 88D (DRC-01C) notice risks, calculates Section 50 interest,
-  enforces Rule 138 E-Way Bills & Rule 48(4) E-Invoicing, and verifies 15-char GSTIN Mod-36 checksums.
+  generates Form CMP-08 composition challans, computes GSTR-7 TDS and GSTR-8 TCS, enforces Rule 138 E-Way Bills
+  and Rule 48(4) E-Invoicing, and verifies 15-character GSTIN Mod-36 checksums.
 ---
 
-# 🇮🇳 Complete GST & CA Compliance Suite
+# 🇮🇳 Complete GST & Universal ERP Compliance Suite
 
-This skill equips Antigravity with the complete set of tools, procedures, and statutory formulas used by Indian Chartered Accountants, Tax Practitioners, and Accountants.
+This skill equips Antigravity with the comprehensive statutory toolkit used by Indian Chartered Accountants, Tax Consultants, and Accountants across all major Indian ERP systems.
 
----
+## Universal ERP Importer Commands
 
-## 📋 Comprehensive GST Forms Covered
-
-| Form / Mechanism | Statutory Rule / Section | Purpose |
-| :--- | :--- | :--- |
-| **GSTR-1** | Section 37 / Rule 59 | Statement of Outward Supplies (B2B, B2CL, B2CS, HSN Table 12, Doc Table 13). Generates GST Portal JSON. |
-| **GSTR-2B vs Books** | Section 16(2)(aa) / Rule 36(4) | Reconciles Purchase register against auto-drafted ITC to catch unfiled vendor invoices. |
-| **GSTR-3B** | Section 39 / Rule 61 | Summary return, eligible/blocked ITC (Sec 17(5)), and optimal tax set-off under Sec 49, 49A & 49B. |
-| **GSTR-9 & 9C** | Section 44 / Rule 80 | Annual Return & CA Reconciliation Statement (Audited P&L vs GSTR-1 vs GSTR-3B vs GSTR-2B). |
-| **DRC-01B** | Rule 88C | Intimation of difference in tax liability between GSTR-1 and GSTR-3B (> 20% or > ₹25 Lakhs). |
-| **DRC-01C** | Rule 88D | Intimation of difference in ITC availed in GSTR-3B vs available in GSTR-2B. |
-| **DRC-03 & Sec 50** | Section 50(1) & 50(3) | Voluntary tax payment & daily interest calculation (18% p.a. for cash delay, 24% p.a. for wrong utilized ITC). |
-| **E-Way Bill** | Rule 138 | Consignment movement > ₹50,000 threshold verification. |
-| **E-Invoice (IRN)** | Rule 48(4) | Mandatory 64-character hash IRN for businesses with turnover > ₹5 Crore. |
-
----
-
-## 🛠 Command-Line Usage for the Agent
-
-### 1. Generate Official GSTR-1 Portal JSON:
 ```bash
-python3 scripts/forms_hub.py gstr1 path/to/sales.json --gstin 27AAPFU0939F1ZV --output gstr1_upload.json
+# Import from Tally Prime XML:
+python3 scripts/forms_hub.py import daybook.xml --format tally-xml --output sales.json
+
+# Import from Zoho Books CSV:
+python3 scripts/forms_hub.py import zoho.csv --format zoho-csv --output sales.json
+
+# Import from Busy / Vyapar / Marg / Excel:
+python3 scripts/forms_hub.py import register.csv --format universal-csv --output sales.json
 ```
 
-### 2. Validate GSTR-1 JSON before Portal Upload:
-```bash
-python3 scripts/forms_hub.py gstr1 path/to/gstr1_upload.json --gstin 27AAPFU0939F1ZV --validate
-```
+## Statutory Returns & Computations
 
-### 3. Compute Monthly GSTR-3B, Tax Set-Off & PMT-06 Cash Challan:
 ```bash
+# GSTR-1 Portal JSON
+python3 scripts/forms_hub.py gstr1 sales.json --gstin 27AAPFU0939F1ZV --output gstr1_upload.json
+
+# GSTR-3B Tax Set-Off & PMT-06 Cash Challan
 python3 scripts/forms_hub.py gstr3b --sales sales.json --purchases purchases.json --gstin 27AAPFU0939F1ZV
-```
 
-### 4. Run Annual GSTR-9 / 9C Audit & Books Reconciliation:
-```bash
-python3 scripts/forms_hub.py gstr9 --config test_data/sample_gstr9_config.json
-```
+# Rule 42 Pro-rata ITC Reversal on Common Inputs
+python3 scripts/forms_hub.py rule42 --total-itc 100000 --exempt-exclusive 10000 --blocked 5000 --taxable-exclusive 50000 --exempt-turnover 200000 --total-turnover 1000000
 
-### 5. Check DRC-01B / DRC-01C Notice Risk:
-```bash
-# Check Rule 88C liability difference (GSTR-1 vs 3B):
-python3 scripts/forms_hub.py notices --check drc01b --gstr1-tax 500000 --gstr3b-tax 350000
+# Rule 43 Capital Goods Monthly Reversal
+python3 scripts/forms_hub.py rule43 --capital-itc 60000 --exempt-turnover 250000 --total-turnover 1000000
 
-# Check Rule 88D ITC difference (GSTR-2B vs 3B):
-python3 scripts/forms_hub.py notices --check drc01c --gstr2b-itc 200000 --gstr3b-itc 280000
-```
+# Form RFD-01 Inverted Duty Refund
+python3 scripts/forms_hub.py refund --type inverted --inverted-turnover 1000000 --adjusted-turnover 1000000 --net-itc-inputs 180000 --net-itc-services 20000 --tax-payable 50000
 
-### 6. Calculate Section 50 Statutory Interest:
-```bash
+# Form CMP-08 Composition Scheme
+python3 scripts/forms_hub.py cmp08 --turnover 1000000 --scheme trader
+
+# DRC-01B / DRC-01C / Section 50 Interest
 python3 scripts/forms_hub.py notices --check interest --tax-due 100000 --due-date 2026-10-20 --pay-date 2026-11-20
-```
-
-### 7. Full Invoice Audit & Interactive Visual HTML Dashboard:
-```bash
-python3 scripts/gst_auditor.py test_data/sample_invoices.json --html audit_dashboard.html
 ```
