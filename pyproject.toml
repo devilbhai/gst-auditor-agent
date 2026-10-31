@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gst-auditor-agent"
+version = "1.0.0"
+description = "Autonomous Indian GST, E-Way Bill & E-Invoice Audit Agent for Claude Code & Antigravity"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "GST Auditor Agent Contributors" }
+]
+keywords = [
+    "gst", "india", "invoicing", "e-waybill", "einvoice", "compliance",
+    "auditor", "antigravity", "claude-code", "agentic-ai", "fintech"
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Office/Business :: Financial :: Accounting"
+]
+dependencies = []
+
+[project.scripts]
+gst-auditor = "gst_auditor:main"

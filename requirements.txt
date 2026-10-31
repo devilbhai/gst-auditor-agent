@@ -1,0 +1,4 @@
+# Core runs with 100% zero external dependencies (Python standard library only)
+# Optional extras for advanced data processing:
+# pandas>=2.0.0
+# rich>=13.0.0
