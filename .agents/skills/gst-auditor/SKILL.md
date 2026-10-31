@@ -1,69 +1,71 @@
 ---
 name: gst-auditor
 description: >-
-  Audits Indian GST invoices, purchase registers, and e-way bills for statutory compliance.
-  Use when the user asks to verify GSTINs, audit invoices, check CGST/SGST vs IGST tax split,
-  validate HSN/SAC codes, check E-Way Bill mandates (Rule 138), verify E-Invoicing IRN (Rule 48(4)),
-  detect blocked ITC under Section 17(5), or reconcile Purchase Books with GSTR-2B.
+  Complete Indian GST & CA Compliance Suite. Generates and audits GSTR-1, computes GSTR-3B
+  tax set-off and cash challans (PMT-06), automates GSTR-9 / 9C annual turnover & ITC reconciliation,
+  evaluates Rule 88C (DRC-01B) & Rule 88D (DRC-01C) notice risks, calculates Section 50 interest,
+  enforces Rule 138 E-Way Bills & Rule 48(4) E-Invoicing, and verifies 15-char GSTIN Mod-36 checksums.
 ---
 
-# 🇮🇳 GST Statutory Compliance & Audit Skill
+# 🇮🇳 Complete GST & CA Compliance Suite
 
-This skill turns Antigravity into an autonomous Indian GST auditor. It verifies invoices against GST statutory rules, catches tax jurisdiction blunders (e.g. intra-state charged as IGST), validates 15-character GSTIN checksums via Mod-36 Luhn variant, audits E-Way Bill and E-Invoicing mandates, and identifies blocked ITC.
-
-## Quick CLI Execution
-
-To run an audit on a batch of invoices (JSON):
-
-```bash
-python3 scripts/gst_auditor.py path/to/invoices.json --html path/to/audit_dashboard.html
-```
-
-To specify annual turnover (defaults to 5.0 Cr for Rule 48(4) IRN check):
-```bash
-python3 scripts/gst_auditor.py path/to/invoices.json --turnover 10.0
-```
-
-To output structured JSON:
-```bash
-python3 scripts/gst_auditor.py path/to/invoices.json --json
-```
+This skill equips Antigravity with the complete set of tools, procedures, and statutory formulas used by Indian Chartered Accountants, Tax Practitioners, and Accountants.
 
 ---
 
-## Statutory Rules Enforced
+## 📋 Comprehensive GST Forms Covered
 
-1. **GSTIN Checksum & State Code Verification**:
-   - Algorithmic 15-character validation (State Code + PAN + Entity + 'Z' + Mod-36 checksum).
-2. **Place of Supply (POS) & Tax Split**:
-   - `Supplier State == Place of Supply`: Intra-State $\rightarrow$ CGST + SGST (50% equal split). IGST must be 0.
-   - `Supplier State != Place of Supply`: Inter-State $\rightarrow$ IGST only. CGST and SGST must be 0.
-3. **E-Way Bill Mandate (Rule 138)**:
-   - Consignments of goods exceeding ₹50,000 (or ₹1,00,000 for intra-state in exempted states like Maharashtra, Delhi, Gujarat, Bihar, West Bengal) must have a valid 12-digit E-Way Bill Number.
-   - Services (SAC starting with 99) are exempt.
-4. **E-Invoicing / IRN Mandate (Rule 48(4))**:
-   - Mandatory for businesses with aggregate turnover > ₹5 Crore.
-   - B2B invoices without a 64-character Invoice Reference Number (IRN) generated via the IRP are legally void; buyer cannot claim Input Tax Credit (ITC).
-5. **HSN / SAC Code & Tax Slab**:
-   - Validates code length (minimum 4 digits for turnover $\le$ ₹5 Cr; minimum 6 digits for turnover > ₹5 Cr).
-   - Validates tax rate against statutory slabs: 0%, 0.1%, 0.25%, 1.5%, 3%, 5%, 12%, 18%, 28%.
-6. **Blocked ITC Section 17(5)**:
-   - Flags ineligibility for motor vehicles, food & beverages, outdoor catering, club memberships, personal consumption, and lost/stolen goods.
-7. **Purchase Register vs GSTR-2B Reconciliation**:
-   - Detects unfiled vendor invoices (ITC at risk under Section 16(2)(aa)).
-   - Flags tax amount discrepancies between books and GSTR-2B.
+| Form / Mechanism | Statutory Rule / Section | Purpose |
+| :--- | :--- | :--- |
+| **GSTR-1** | Section 37 / Rule 59 | Statement of Outward Supplies (B2B, B2CL, B2CS, HSN Table 12, Doc Table 13). Generates GST Portal JSON. |
+| **GSTR-2B vs Books** | Section 16(2)(aa) / Rule 36(4) | Reconciles Purchase register against auto-drafted ITC to catch unfiled vendor invoices. |
+| **GSTR-3B** | Section 39 / Rule 61 | Summary return, eligible/blocked ITC (Sec 17(5)), and optimal tax set-off under Sec 49, 49A & 49B. |
+| **GSTR-9 & 9C** | Section 44 / Rule 80 | Annual Return & CA Reconciliation Statement (Audited P&L vs GSTR-1 vs GSTR-3B vs GSTR-2B). |
+| **DRC-01B** | Rule 88C | Intimation of difference in tax liability between GSTR-1 and GSTR-3B (> 20% or > ₹25 Lakhs). |
+| **DRC-01C** | Rule 88D | Intimation of difference in ITC availed in GSTR-3B vs available in GSTR-2B. |
+| **DRC-03 & Sec 50** | Section 50(1) & 50(3) | Voluntary tax payment & daily interest calculation (18% p.a. for cash delay, 24% p.a. for wrong utilized ITC). |
+| **E-Way Bill** | Rule 138 | Consignment movement > ₹50,000 threshold verification. |
+| **E-Invoice (IRN)** | Rule 48(4) | Mandatory 64-character hash IRN for businesses with turnover > ₹5 Crore. |
 
 ---
 
-## Step-by-Step Audit Procedure for the Agent
+## 🛠 Command-Line Usage for the Agent
 
-When the user provides an invoice or ask to audit books:
+### 1. Generate Official GSTR-1 Portal JSON:
+```bash
+python3 scripts/forms_hub.py gstr1 path/to/sales.json --gstin 27AAPFU0939F1ZV --output gstr1_upload.json
+```
 
-1. **Locate or Extract Data**:
-   Parse invoice details: `supplier_gstin`, `buyer_gstin`, `place_of_supply`, `taxable_value`, `cgst`, `sgst`, `igst`, `hsn_sac`, `invoice_total`, `irn`, `eway_bill_number`.
-2. **Run Core Auditor**:
-   Invoke `scripts/gst_auditor.py` or import `audit_single_invoice` from `scripts.gst_auditor`.
-3. **Present Output**:
-   - Executive Summary (Total Invoices, Passed, Critical Errors, Tax At Risk).
-   - Detailed Findings per invoice.
-   - If requested, generate the interactive HTML Dashboard using `--html <filename>.html`.
+### 2. Validate GSTR-1 JSON before Portal Upload:
+```bash
+python3 scripts/forms_hub.py gstr1 path/to/gstr1_upload.json --gstin 27AAPFU0939F1ZV --validate
+```
+
+### 3. Compute Monthly GSTR-3B, Tax Set-Off & PMT-06 Cash Challan:
+```bash
+python3 scripts/forms_hub.py gstr3b --sales sales.json --purchases purchases.json --gstin 27AAPFU0939F1ZV
+```
+
+### 4. Run Annual GSTR-9 / 9C Audit & Books Reconciliation:
+```bash
+python3 scripts/forms_hub.py gstr9 --config test_data/sample_gstr9_config.json
+```
+
+### 5. Check DRC-01B / DRC-01C Notice Risk:
+```bash
+# Check Rule 88C liability difference (GSTR-1 vs 3B):
+python3 scripts/forms_hub.py notices --check drc01b --gstr1-tax 500000 --gstr3b-tax 350000
+
+# Check Rule 88D ITC difference (GSTR-2B vs 3B):
+python3 scripts/forms_hub.py notices --check drc01c --gstr2b-itc 200000 --gstr3b-itc 280000
+```
+
+### 6. Calculate Section 50 Statutory Interest:
+```bash
+python3 scripts/forms_hub.py notices --check interest --tax-due 100000 --due-date 2026-10-20 --pay-date 2026-11-20
+```
+
+### 7. Full Invoice Audit & Interactive Visual HTML Dashboard:
+```bash
+python3 scripts/gst_auditor.py test_data/sample_invoices.json --html audit_dashboard.html
+```

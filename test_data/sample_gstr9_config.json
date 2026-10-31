@@ -1,0 +1,30 @@
+{
+  "audited_pnl_turnover": 12500000.0,
+  "gstr1_annual_turnover": 12000000.0,
+  "gstr3b_annual_turnover": 12000000.0,
+  "books_tax_payable": {
+    "igst": 450000.0,
+    "cgst": 900000.0,
+    "sgst": 900000.0
+  },
+  "gstr3b_tax_paid": {
+    "igst": 450000.0,
+    "cgst": 850000.0,
+    "sgst": 850000.0
+  },
+  "books_itc": {
+    "igst": 120000.0,
+    "cgst": 340000.0,
+    "sgst": 340000.0
+  },
+  "gstr3b_claimed_itc": {
+    "igst": 120000.0,
+    "cgst": 390000.0,
+    "sgst": 390000.0
+  },
+  "gstr2b_annual_itc": {
+    "igst": 120000.0,
+    "cgst": 340000.0,
+    "sgst": 340000.0
+  }
+}
